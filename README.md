@@ -1,140 +1,125 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Aniruddha Search Hub — Private Instant Search</title>
-  <meta name="description" content="Private, simple search box — choose Google or DuckDuckGo. No tracking, no personal data collection."/>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aniruddha Search Hub — Private Smart Search</title>
+  <meta name="description" content="A private, professional search hub — search Google or DuckDuckGo instantly without sharing any personal data." />
+  <style>
+    :root {
+      --bg: #0f172a;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --border: rgba(255, 255, 255, 0.08);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh;
+      font-family: 'Poppins', system-ui, sans-serif;
+      color: var(--text);
+      background: radial-gradient(circle at top, #0b1220, #0f172a);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      width: 100%; max-width: 700px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    h1 {
+      margin: 0; font-size: 28px; text-align: center;
+      color: var(--accent);
+    }
+    p.desc {
+      color: var(--muted);
+      text-align: center;
+      margin-top: 8px;
+      font-size: 15px;
+    }
+    .search-box {
+      margin-top: 25px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 14px 16px;
+      font-size: 16px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      outline: none;
+    }
+    button {
+      background: var(--accent);
+      border: none;
+      border-radius: 10px;
+      color: #0f172a;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 14px 16px;
+      transition: 0.2s;
+    }
+    button:hover { opacity: 0.9; }
+    .info {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+  </style>
 </head>
 <body>
-  <main class="wrap">
-    <header>
-      <h1>Aniruddha Search Hub</h1>
-      <p class="muted">Search the web quickly. Choose Google for best results or DuckDuckGo for privacy. This site does not collect any personal info.</p>
-    </header>
+  <div class="card">
+    <h1>🔍 Aniruddha Search Hub</h1>
+    <p class="desc">Search anything privately — choose Google or DuckDuckGo. No tracking. No data collection.</p>
 
-    <form id="searchForm" class="search-form" onsubmit="return doSearch()">
-      <input id="q" name="q" autocomplete="off" placeholder="Type something to search (example: JEE study tips, ESP32 projects)"/>
-      <div class="buttons">
-        <button type="button" id="btn-google">Search Google</button>
-        <button type="button" id="btn-ddg">Search DuckDuckGo</button>
-        <button type="button" id="btn-bang">Quick: !g (Google) / !d (DuckDuckGo)</button>
-      </div>
-      <p class="hint">Tip: prefix your query with <code>!g</code> for Google or <code>!d</code> for DuckDuckGo — the quick button helps.</p>
-    </form>
+    <div class="search-box">
+      <input type="text" id="search" placeholder="Type here... (e.g. Jarvis X AI system)" />
+      <button onclick="searchGoogle()">Google</button>
+      <button onclick="searchDuck()">DuckDuckGo</button>
+    </div>
 
-    <section class="notes">
-      <h3>Privacy & Notes</h3>
+    <div class="info">
       <ul>
-        <li>This page <strong>does not</strong> collect or save searches or visitor IPs.</li>
-        <li>When you click a result, you leave this site and go to Google / DuckDuckGo; those providers may track according to their own policies.</li>
-        <li>If you prefer maximum privacy, use DuckDuckGo. No accounts or personal details required.</li>
+        <li>This website doesn’t collect or store any personal data.</li>
+        <li>All searches go directly to Google or DuckDuckGo.</li>
+        <li>DuckDuckGo is privacy-first; Google offers the widest results.</li>
       </ul>
-    </section>
+    </div>
 
-    <footer>
-      <small>© 2025 Aniruddha — Search Hub • No personal data stored</small>
-    </footer>
-  </main>
+    <footer>© 2025 Aniruddha Naskar • Privacy-Safe Smart Search</footer>
+  </div>
 
   <script>
-    // handle searching: uses safe redirect to official search pages (no server)
-    const qEl = document.getElementById('q');
-    const btnGoogle = document.getElementById('btn-google');
-    const btnDdg = document.getElementById('btn-ddg');
-    const btnBang = document.getElementById('btn-bang');
+    const input = document.getElementById("search");
 
-    function buildGoogleUrl(q) {
-      return 'https://www.google.com/search?q=' + encodeURIComponent(q);
-    }
-    function buildDdgUrl(q) {
-      return 'https://duckduckgo.com/?q=' + encodeURIComponent(q);
+    function searchGoogle() {
+      const q = input.value.trim();
+      if (q) window.open("https://www.google.com/search?q=" + encodeURIComponent(q), "_blank", "noopener,noreferrer");
     }
 
-    function parseBang(q) {
-      if (!q) return {engine:null, query:''};
-      const s = q.trim();
-      if (s.startsWith('!g ')) return {engine:'g', query: s.slice(3)};
-      if (s.startsWith('!d ')) return {engine:'d', query: s.slice(3)};
-      return {engine:null, query: s};
+    function searchDuck() {
+      const q = input.value.trim();
+      if (q) window.open("https://duckduckgo.com/?q=" + encodeURIComponent(q), "_blank", "noopener,noreferrer");
     }
 
-    function doSearch() {
-      const raw = qEl.value || '';
-      const parsed = parseBang(raw);
-      let target;
-      if (parsed.engine === 'g') target = buildGoogleUrl(parsed.query);
-      else if (parsed.engine === 'd') target = buildDdgUrl(parsed.query);
-      else {
-        // default to Google (user asked for Google by design).
-        target = buildGoogleUrl(parsed.query);
-      }
-      if (!parsed.query) {
-        qEl.focus();
-        return false;
-      }
-      window.open(target, '_blank', 'noopener,noreferrer');
-      return false; // prevent form submit
-    }
-
-    btnGoogle.addEventListener('click', ()=> {
-      const raw = qEl.value || '';
-      const parsed = parseBang(raw);
-      const q = parsed.engine ? parsed.query : raw;
-      if (!q) { qEl.focus(); return; }
-      window.open(buildGoogleUrl(q), '_blank', 'noopener,noreferrer');
-    });
-
-    btnDdg.addEventListener('click', ()=> {
-      const raw = qEl.value || '';
-      const parsed = parseBang(raw);
-      const q = parsed.engine ? parsed.query : raw;
-      if (!q) { qEl.focus(); return; }
-      window.open(buildDdgUrl(q), '_blank', 'noopener,noreferrer');
-    });
-
-    btnBang.addEventListener('click', ()=> {
-      alert('Quick tips:\\n• Start your search with !g or !d then a space.\\n• Example: !d best study apps for iit');
-      qEl.focus();
-    });
-
-    // small convenience: press Enter inside input triggers doSearch
-    qEl.addEventListener('keydown', (e)=> {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        doSearch();
-      }
+    // allow pressing Enter to search Google
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") searchGoogle();
     });
   </script>
 </body>
 </html>
-:root{
-  --bg:#0f1724; --card:#0b1220; --text:#e6eef8; --muted:#93a3b8; --accent:#38bdf8;
-}
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial}
-body{background:linear-gradient(180deg,#071025 0%, #0f1724 100%); color:var(--text); display:flex;align-items:center;justify-content:center;padding:20px}
-.wrap{width:100%;max-width:820px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border-radius:14px;padding:28px; box-shadow:0 10px 30px rgba(2,6,23,0.6)}
-header h1{margin:0;font-size:28px;letter-spacing:0.2px}
-.muted{color:var(--muted);margin-top:8px}
-.search-form{margin-top:20px}
-.search-form input[type="text"], .search-form input {
-  width:100%; padding:14px 16px; border-radius:10px; border:1px solid rgba(255,255,255,0.06);
-  background:rgba(255,255,255,0.02); color:var(--text); font-size:16px; outline:none;
-}
-.buttons{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
-.buttons button{
-  flex:1; padding:10px 12px; border-radius:10px; border:0; cursor:pointer; font-weight:600;
-  background:var(--accent); color:#05202b; box-shadow: 0 6px 18px rgba(8,86,128,0.12);
-}
-.buttons button#btn-ddg{background:#94a3b8;color:#071025}
-.buttons button#btn-bang{flex:2;background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted)}
-.hint{color:var(--muted);font-size:13px;margin-top:8px}
-.notes{margin-top:18px;background:rgba(255,255,255,0.02); padding:12px;border-radius:10px;color:var(--muted)}
-.notes ul{margin:8px 0 0 18px}
-footer{margin-top:18px;text-align:center;color:var(--muted);font-size:13px}
-@media(max-width:640px){
-  header h1{font-size:22px}
-  .buttons button{font-size:14px}
-}
